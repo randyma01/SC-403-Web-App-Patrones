@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <!-- Fragmento #1: Formularios para la ejecución de consultas -->
+    <section th:fragment="filtrosConsultas" class="py-3">
+        <div class="container-fluid px-4">
+            <div class="row g-3">
+                
+                <!-- 1. Formulario Consulta Ampliada -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card shadow-sm border-primary h-100">
+                        <div class="card-header bg-primary text-white">
+                            <h5 class="mb-0 fs-6">
+                                <i class="fa-solid fa-code me-2"></i>[[#{consultas.query1}]]
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted small mb-3">[[#{consultas.query1.desc}]]</p>
+                            <form th:action="@{/pruebas/query1}" method="post">
+                                <div class="row g-2 mb-3">
+                                    <div class="col-6">
+                                        <label class="form-label small fw-bold">[[#{consultas.durezaInf}]]</label>
+                                        <input type="number" name="durezaInf" th:value="${durezaInf != null ? durezaInf : 1}" 
+                                               min="1" max="10" class="form-control form-control-sm" required="true"/>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small fw-bold">[[#{consultas.durezaSup}]]</label>
+                                        <input type="number" name="durezaSup" th:value="${durezaSup != null ? durezaSup : 10}" 
+                                               min="1" max="10" class="form-control form-control-sm" required="true"/>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-primary btn-sm w-100">
+                                    <i class="fa-solid fa-filter me-1"></i>[[#{consultas.buscar}]]
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 2. Formulario Consulta JPQL -->
+                <div class="col-lg-4 col-md-6">
+                    <div class="card shadow-sm border-success h-100">
+                        <div class="card-header bg-success text-white">
+                            <h5 class="mb-0 fs-6">
+                                <i class="fa-solid fa-diagram-project me-2"></i>[[#{consultas.query2}]]
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted small mb-3">[[#{consultas.query2.desc}]]</p>
+                            <form th:action="@{/pruebas/query2}" method="post">
+                                <div class="row g-2 mb-3">
+                                    <div class="col-6">
+                                        <label class="form-label small fw-bold">[[#{consultas.durezaInf}]]</label>
+                                        <input type="number" name="durezaInf" th:value="${durezaInf != null ? durezaInf : 1}" 
+                                               min="1" max="10" class="form-control form-control-sm" required="true"/>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small fw-bold">[[#{consultas.durezaSup}]]</label>
+                                        <input type="number" name="durezaSup" th:value="${durezaSup != null ? durezaSup : 10}" 
+                                               min="1" max="10" class="form-control form-control-sm" required="true"/>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-success btn-sm w-100">
+                                    <i class="fa-solid fa-filter me-1"></i>[[#{consultas.buscar}]]
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 3. Formulario Consulta SQL Nativa -->
+                <div class="col-lg-4 col-md-12">
+                    <div class="card shadow-sm border-warning h-100">
+                        <div class="card-header bg-warning text-dark">
+                            <h5 class="mb-0 fs-6">
+                                <i class="fa-solid fa-database me-2"></i>[[#{consultas.query3}]]
+                            </h5>
+                        </div>
+                        <div class="card-body">
+                            <p class="text-muted small mb-3">[[#{consultas.query3.desc}]]</p>
+                            <form th:action="@{/pruebas/query3}" method="post">
+                                <div class="row g-2 mb-3">
+                                    <div class="col-6">
+                                        <label class="form-label small fw-bold">[[#{consultas.durezaInf}]]</label>
+                                        <input type="number" name="durezaInf" th:value="${durezaInf != null ? durezaInf : 1}" 
+                                               min="1" max="10" class="form-control form-control-sm" required="true"/>
+                                    </div>
+                                    <div class="col-6">
+                                        <label class="form-label small fw-bold">[[#{consultas.durezaSup}]]</label>
+                                        <input type="number" name="durezaSup" th:value="${durezaSup != null ? durezaSup : 10}" 
+                                               min="1" max="10" class="form-control form-control-sm" required="true"/>
+                                    </div>
+                                </div>
+                                <button type="submit" class="btn btn-warning btn-sm w-100 text-dark">
+                                    <i class="fa-solid fa-filter me-1"></i>[[#{consultas.buscar}]]
+                                </button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+            <!-- Fila secundaria: Consultas adicionales por texto -->
+            <div class="row g-3 mt-1">
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-secondary">
+                        <div class="card-body py-2">
+                            <form th:action="@{/pruebas/queryNombre}" method="post" class="d-flex align-items-center gap-2">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text"><i class="fa-solid fa-magnifying-glass"></i></span>
+                                    <input type="text" name="nombreComun" th:value="${nombreComunBusqueda}" 
+                                           placeholder="Buscar por Nombre Común (Ampliada)..." class="form-control"/>
+                                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="card shadow-sm border-secondary">
+                        <div class="card-body py-2">
+                            <form th:action="@{/pruebas/queryHabitat}" method="post" class="d-flex align-items-center gap-2">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text"><i class="fa-solid fa-mountain-sun"></i></span>
+                                    <input type="text" name="habitat" th:value="${habitatBusqueda}" 
+                                           placeholder="Buscar por Hábitat / Región (JPQL)..." class="form-control"/>
+                                    <button class="btn btn-outline-secondary" type="submit">Buscar</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
+    <!-- Fragmento #2: Tarjeta informativa del resultado de la consulta -->
+    <section th:fragment="infoConsulta" class="py-2">
+        <div class="container-fluid px-4">
+            <div class="alert alert-light border shadow-sm d-flex flex-wrap align-items-center justify-content-between p-3 mb-0">
+                <div>
+                    <h6 class="alert-heading mb-1 text-primary">
+                        <i class="fa-solid fa-circle-info me-2"></i>[[#{consultas.tipoEjecutado}]] 
+                        <span class="fw-bold text-dark" th:text="${tipoConsulta}">Tipo de Consulta</span>
+                    </h6>
+                    <div th:if="${consultaEjecutada}" class="small text-muted font-monospace mt-1">
+                        <code>[[${consultaEjecutada}]]</code>
+                    </div>
+                </div>
+                <div class="mt-2 mt-md-0 d-flex align-items-center gap-2">
+                    <span class="badge bg-dark fs-6 py-2 px-3">
+                        <i class="fa-solid fa-tree me-1 text-success"></i>[[${totalArboles}]] [[#{consultas.resultados}]]
+                    </span>
+                    <a th:href="@{/pruebas/listado}" class="btn btn-sm btn-outline-danger">
+                        <i class="fa-solid fa-arrows-rotate me-1"></i>Limpiar Filtro
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fragmento #3: Resultados en tabla y cuadrícula de tarjetas -->
+    <section th:fragment="listadoResultados" class="py-3">
+        <div class="container-fluid px-4">
+            <div class="card shadow-sm border-0">
+                <div class="card-header bg-white py-3 d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0 text-success">
+                        <i class="fa-solid fa-list-check me-2"></i>[[#{consultas.resultados}]]
+                    </h5>
+                    <a th:href="@{/arbol/listado}" class="btn btn-outline-success btn-sm">
+                        <i class="fa-solid fa-pen-to-square me-1"></i>Ir a Administrar Árboles
+                    </a>
+                </div>
+                <div class="card-body p-0">
+                    <div th:if="${arboles != null and !arboles.empty}" class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-dark">
+                                <tr>
+                                    <th class="text-center" style="width: 50px;">#</th>
+                                    <th style="width: 100px;">[[#{arbol.imagen}]]</th>
+                                    <th>[[#{arbol.nombreComun}]]</th>
+                                    <th>[[#{arbol.tipoFlor}]]</th>
+                                    <th class="text-center">[[#{arbol.durezaMadera}]]</th>
+                                    <th>[[#{arbol.habitat}]]</th>
+                                    <th class="text-center">[[#{arbol.activo}]]</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="arbol, contador : ${arboles}">
+                                    <td class="text-center fw-bold" th:text="${contador.count}">1</td>
+                                    <td>
+                                        <img th:if="${arbol.rutaImagen != null and !arbol.rutaImagen.empty}"
+                                             th:src="${arbol.rutaImagen}" alt="Foto"
+                                             class="img-thumbnail img-thumbnail-custom"
+                                             style="height: 60px; width: 60px; object-fit: cover;"/>
+                                        <span th:unless="${arbol.rutaImagen != null and !arbol.rutaImagen.empty}" 
+                                              class="text-muted small fst-italic">Sin foto</span>
+                                    </td>
+                                    <td class="fw-semibold text-dark">
+                                        <i class="fa-solid fa-tree text-success me-1"></i>[[${arbol.nombreComun}]]
+                                    </td>
+                                    <td>[[${arbol.tipoFlor}]]</td>
+                                    <td class="text-center">
+                                        <span class="badge rounded-pill badge-dureza"
+                                              th:classappend="${arbol.durezaMadera >= 8} ? 'bg-danger' : (${arbol.durezaMadera >= 5} ? 'bg-warning text-dark' : 'bg-info text-dark')"
+                                              th:text="${arbol.durezaMadera} + ' / 10'">
+                                            7 / 10
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <i class="fa-solid fa-location-dot text-muted me-1 small"></i>[[${arbol.habitat}]]
+                                    </td>
+                                    <td class="text-center">
+                                        <span th:if="${arbol.activo}" class="badge bg-success">
+                                            <i class="fa-solid fa-check me-1"></i>Activo
+                                        </span>
+                                        <span th:unless="${arbol.activo}" class="badge bg-secondary">
+                                            <i class="fa-solid fa-xmark me-1"></i>Inactivo
+                                        </span>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    
+                    <!-- Mensaje si no hay resultados -->
+                    <div th:if="${arboles == null or arboles.empty}" class="p-5 text-center text-muted">
+                        <i class="fa-solid fa-box-open fa-3x mb-3 text-secondary"></i>
+                        <h5>[[#{consultas.vacio}]]</h5>
+                        <p class="small">Intente ajustar los rangos de dureza (ej: 1 al 10) o limpie los filtros.</p>
+                        <a th:href="@{/pruebas/listado}" class="btn btn-primary btn-sm mt-2">
+                            <i class="fa-solid fa-arrows-rotate me-1"></i>Restablecer Todos los Árboles
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+</html>

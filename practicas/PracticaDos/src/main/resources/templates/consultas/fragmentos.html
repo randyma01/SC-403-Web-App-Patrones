@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+
+    <!-- Fragmento 'consultas': fila con los formularios (Fiel al PDF Semana 08 V.04 Diapositiva 9) -->
+    <section th:fragment="consultas" class="container-fluid px-4 py-3">
+        <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-3">
+            <div th:replace="~{consultas/fragmentos :: formConsulta('primary', #{consultas.derivadas}, '/consultas/consultaDerivada')}"/>
+            <div th:replace="~{consultas/fragmentos :: formConsulta('warning', #{consultas.jpql}, '/consultas/consultaJPQL')}"/>
+            <div th:replace="~{consultas/fragmentos :: formConsulta('success', #{consultas.sql}, '/consultas/consultaSQL')}"/>
+            
+            <!-- 4ta Tarjeta: Práctica #2 (Donde en la diapositiva 9 del PDF dice "Acá va su Práctica #2") -->
+            <div class="col">
+                <form method="post" th:action="@{/consultas/consultaTexto}" class="was-validated h-100">
+                    <div class="card p-2 h-100 shadow-sm border-info">
+                        <div class="card-header text-center text-white bg-info">
+                            <h5 class="mb-0">[[#{consultas.practica2}]]</h5>
+                        </div>
+                        <div class="card-body">
+                            <div class="mb-3">
+                                <label class="form-label small fw-bold">[[#{consultas.texto.buscar}]]</label>
+                                <input type="text" name="textoBuscar" th:value="${textoBuscar}" 
+                                       class="form-control" placeholder="Ej: Guanacaste, Roble..." required="true"/>
+                            </div>
+                            <p class="text-muted small mb-0">Filtra árboles por coincidencia en su nombre común (Consulta Derivada).</p>
+                        </div>
+                        <div class="card-footer text-center bg-white border-0">
+                            <button type="submit" class="btn text-white btn-info w-100">
+                                <i class="fa-solid fa-magnifying-glass me-1"></i> [[#{consultas.buscar}]]
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </section>
+
+    <!-- Fragmento reutilizable 'formConsulta' parametrizado (Fiel al PDF Semana 08 V.04 Diapositiva 11) -->
+    <div th:fragment="formConsulta(colorForm, textoForm, urlForm)" class="col">
+        <form method="post" th:action="@{${urlForm}}" class="was-validated h-100">
+            <div class="card p-2 h-100 shadow-sm" th:classappend="${'border-' + colorForm}">
+                <div class="card-header text-center text-white" th:classappend="${'bg-' + colorForm}">
+                    <h5 class="mb-0">[[${textoForm}]]</h5>
+                </div>
+                <div class="card-body">
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">[[#{consultas.dureza.inferior}]]</label>
+                        <input type="number" name="durezaInf" th:value="${durezaInf != null ? durezaInf : 1}"
+                               class="form-control" min="1" max="10" required="true"/>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label small fw-bold">[[#{consultas.dureza.superior}]]</label>
+                        <input type="number" name="durezaSup" th:value="${durezaSup != null ? durezaSup : 10}"
+                               class="form-control" min="1" max="10" required="true"/>
+                    </div>
+                </div>
+                <div class="card-footer text-center bg-white border-0">
+                    <button type="submit" class="btn text-white w-100" th:classappend="${'btn-' + colorForm}">
+                        <i class="fa-solid fa-magnifying-glass me-1"></i> [[${textoForm}]]
+                    </button>
+                </div>
+            </div>
+        </form>
+    </div>
+
+    <!-- Fragmento 'tarjetas' para presentar los árboles en tarjetas (Fiel al PDF Semana 08 V.04 Diapositiva 12) -->
+    <section th:fragment="tarjetas" class="container-fluid px-4 py-3">
+        <!-- Barra de estado / total de resultados -->
+        <div class="alert alert-light border shadow-sm d-flex flex-wrap justify-content-between align-items-center mb-4">
+            <div>
+                <span class="fw-bold text-dark fs-6">
+                    <i class="fa-solid fa-circle-info text-primary me-2"></i>[[${tipoConsulta != null ? tipoConsulta : 'Catálogo Completo'}]]
+                </span>
+                <span th:if="${consultaEjecutada}" class="d-block small text-muted font-monospace mt-1">
+                    <code>[[${consultaEjecutada}]]</code>
+                </span>
+            </div>
+            <div class="d-flex align-items-center gap-2 mt-2 mt-md-0">
+                <span class="badge bg-dark fs-6 py-2 px-3">
+                    <i class="fa-solid fa-tree text-success me-1"></i>[[${totalArboles}]] [[#{consultas.resultados}]]
+                </span>
+                <a th:href="@{/consultas/listado}" class="btn btn-sm btn-outline-secondary">
+                    <i class="fa-solid fa-arrows-rotate me-1"></i>Restablecer
+                </a>
+            </div>
+        </div>
+
+        <!-- Cuadrícula de tarjetas de árboles (similar a Producto en TechShop) -->
+        <div th:if="${arboles != null and !arboles.empty}" class="row row-cols-1 row-cols-md-2 row-cols-lg-3 row-cols-xl-4 g-4">
+            <div th:each="arbol : ${arboles}" class="col">
+                <div class="card h-100 shadow-sm border-0">
+                    <div class="d-flex justify-content-center align-items-center bg-light p-3" style="height: 190px;">
+                        <img th:if="${arbol.rutaImagen != null and !arbol.rutaImagen.empty}"
+                             th:src="${arbol.rutaImagen}" class="img-fluid rounded" th:alt="${arbol.nombreComun}"
+                             style="max-height: 170px; object-fit: cover; width: 100%;"/>
+                        <div th:unless="${arbol.rutaImagen != null and !arbol.rutaImagen.empty}" class="text-muted text-center">
+                            <i class="fa-solid fa-tree fa-3x mb-2 text-secondary"></i>
+                            <p class="small mb-0">Sin fotografía</p>
+                        </div>
+                    </div>
+                    <div class="card-header bg-white border-top">
+                        <h5 class="card-title text-center text-truncate mb-0 fw-bold">[[${arbol.nombreComun}]]</h5>
+                    </div>
+                    <div class="card-body d-flex flex-column">
+                        <p class="card-text text-muted small mb-2">
+                            <i class="fa-solid fa-spa text-warning me-1"></i><strong>Flor:</strong> [[${arbol.tipoFlor}]]
+                        </p>
+                        <p class="card-text text-muted small mb-auto">
+                            <i class="fa-solid fa-mountain-sun text-info me-1"></i><strong>Hábitat:</strong> [[${arbol.habitat}]]
+                        </p>
+                    </div>
+                    <div class="card-footer bg-white d-flex justify-content-between align-items-center">
+                        <div>
+                            <span class="badge rounded-pill"
+                                  th:classappend="${arbol.durezaMadera >= 8} ? 'bg-danger' : (${arbol.durezaMadera >= 5} ? 'bg-warning text-dark' : 'bg-info text-dark')"
+                                  th:text="'Dureza: ' + ${arbol.durezaMadera} + ' / 10'">
+                                Dureza 7 / 10
+                            </span>
+                        </div>
+                        <div>
+                            <span th:if="${arbol.activo}" class="badge bg-success">Activo</span>
+                            <span th:unless="${arbol.activo}" class="badge bg-secondary">Inactivo</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Estado vacío si no hay coincidencias -->
+        <div th:if="${arboles == null or arboles.empty}" class="p-5 text-center text-muted card shadow-sm">
+            <i class="fa-solid fa-box-open fa-3x mb-3 text-secondary"></i>
+            <h5>[[#{consultas.vacio}]]</h5>
+            <p class="small">Ajuste los valores de dureza o restablezca el catálogo.</p>
+            <div>
+                <a th:href="@{/consultas/listado}" class="btn btn-primary btn-sm">
+                    <i class="fa-solid fa-arrows-rotate me-1"></i>Ver Todos los Árboles
+                </a>
+            </div>
+        </div>
+    </section>
+
+</html>

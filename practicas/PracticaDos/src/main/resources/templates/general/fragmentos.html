@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    
+    <!-- Fragmento #1: HEAD general para todas las vistas -->
+    <head th:fragment="head">
+        <title>[[#{aplicacion.titulo}]]</title>
+        <meta charset="UTF-8"/>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        
+        <!-- WebJars CSS -->
+        <link th:href="@{/webjars/bootstrap/5.3.3/css/bootstrap.min.css}" rel="stylesheet"/>
+        <link th:href="@{/webjars/font-awesome/6.5.2/css/all.min.css}" rel="stylesheet"/>
+        <link th:href="@{/css/estilos.css}" rel="stylesheet"/>
+        
+        <!-- WebJars JS -->
+        <script th:src="@{/webjars/jquery/3.7.1/jquery.min.js}"></script>
+        <script th:src="@{/webjars/popper.js/2.11.7/umd/popper.min.js}"></script>
+        <script th:src="@{/webjars/bootstrap/5.3.3/js/bootstrap.min.js}"></script>
+        <script th:src="@{/js/rutinas.js}"></script>
+    </head>
+
+    <body>
+        <!-- Fragmento #2: Encabezado y Barra de Navegación -->
+        <header th:fragment="header" class="header">
+            <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
+                <div class="container">
+                    <a th:href="@{/}" class="navbar-brand">
+                        <i class="fa-solid fa-tree text-success me-2"></i>[[#{aplicacion.titulo}]]
+                    </a>
+                    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse"
+                            aria-controls="navbarCollapse" aria-expanded="false" aria-label="Toggle navigation">
+                        <span class="navbar-toggler-icon"></span>
+                    </button>
+                    <div class="collapse navbar-collapse justify-content-between" id="navbarCollapse">
+                        <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/}">
+                                    <i class="fa-solid fa-house me-1"></i>[[#{plantilla.inicio}]]
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/arbol/listado}">
+                                    <i class="fa-solid fa-seedling me-1"></i>[[#{plantilla.arboles}]]
+                                </a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link" th:href="@{/consultas/listado}">
+                                    <i class="fa-solid fa-magnifying-glass me-1"></i>[[#{plantilla.consultas}]]
+                                </a>
+                            </li>
+                        </ul>
+                        <ul class="navbar-nav">
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i class="fa-solid fa-globe me-1"></i>[[#{plantilla.idioma}]]
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" th:href="@{/(lang=es)}">Español</a></li>
+                                    <li><a class="dropdown-item" th:href="@{/(lang=en)}">English</a></li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </nav>
+            <section id="main-header" class="py-3 bg-success text-white shadow-sm">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2 class="mb-0">
+                                <i class="fa-solid fa-leaf me-2"></i>[[#{plantilla.subtitulo}]]
+                            </h2>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </header>
+
+        <!-- Fragmento #3: Pie de Página -->
+        <footer th:fragment="footer" class="p-3 mt-5 bg-dark text-white text-center">
+            <div class="container">
+                <p class="mb-0 text-muted">[[#{plantilla.derechos}]]</p>
+            </div>
+        </footer>
+
+        <!-- Fragmento #4: Toast de Notificaciones -->
+        <section th:fragment="mostrarToast">
+            <div aria-live="polite" aria-atomic="true" class="position-fixed top-0 end-0 p-3" style="z-index: 1080;">
+                <div th:if="${error}" class="toast show text-bg-danger border-0 mb-2 shadow" role="alert" aria-live="assertive" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fa-solid fa-circle-exclamation me-2"></i>[[${error}]]
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+                <div th:if="${todoOk}" class="toast show text-bg-success border-0 mb-2 shadow" role="status" aria-live="polite" aria-atomic="true">
+                    <div class="d-flex">
+                        <div class="toast-body">
+                            <i class="fa-solid fa-circle-check me-2"></i>[[${todoOk}]]
+                        </div>
+                        <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast" aria-label="Close"></button>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>

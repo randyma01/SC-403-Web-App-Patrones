@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+
+        <main>
+            <!-- 1. Formularios de filtros para cada tipo de consulta -->
+            <section th:replace="~{pruebas/fragmentos :: filtrosConsultas}"/>
+
+            <!-- 2. Información contextual de la consulta ejecutada -->
+            <section th:replace="~{pruebas/fragmentos :: infoConsulta}"/>
+
+            <!-- 3. Tabla de resultados de árboles consultados -->
+            <section th:replace="~{pruebas/fragmentos :: listadoResultados}"/>
+
+            <!-- 4. Notificaciones Toast -->
+            <section th:replace="~{general/fragmentos :: mostrarToast}"/>
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>

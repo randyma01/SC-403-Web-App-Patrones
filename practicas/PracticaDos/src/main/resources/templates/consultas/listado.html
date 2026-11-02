@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{general/fragmentos :: head}"/>
+    <body>
+        <header th:replace="~{general/fragmentos :: header}"/>
+
+        <main>
+            <!-- 1. Fila de formularios de consulta (Semana 08 V.04 Diapositiva 6 y 9) -->
+            <section th:replace="~{consultas/fragmentos :: consultas}"/>
+
+            <!-- 2. Presentación de árboles en tarjetas (Semana 08 V.04 Diapositiva 6 y 12) -->
+            <section th:replace="~{consultas/fragmentos :: tarjetas}"/>
+
+            <!-- 3. Notificaciones Toast -->
+            <section th:replace="~{general/fragmentos :: mostrarToast}"/>
+        </main>
+
+        <footer th:replace="~{general/fragmentos :: footer}"/>
+    </body>
+</html>
