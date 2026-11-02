@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:th="http://www.thymeleaf.org">
+    <head th:replace="~{plantilla :: head}">
+        <title>[[#{aplicacion.titulo}]]</title>
+    </head>
+    <body>
+        <!-- 1. Fragmento: listado de preguntas -->
+        <section th:fragment="listado" id="preguntas">
+            <div class="container my-4">
+                <div class="row">
+                    <div class="col-md-9">
+                        <div class="card shadow-sm border-0">
+                            <div class="card-header bg-dark text-white">
+                                <h4 class="mb-0"><i class="fa-solid fa-clipboard-question me-2"></i>[[#{pregunta.listado}]]</h4>
+                            </div>
+                            <div class="card-body p-0">
+                                <div class="table-responsive" th:if="${preguntas != null and !preguntas.empty}">
+                                    <table class="table table-striped table-hover align-middle mb-0">
+                                        <thead class="table-dark">
+                                            <tr>
+                                                <th>#</th>
+                                                <th>[[#{pregunta.imagen}]]</th>
+                                                <th>[[#{pregunta.enunciado}]]</th>
+                                                <th>[[#{pregunta.tema}]]</th>
+                                                <th>[[#{pregunta.puntos}]]</th>
+                                                <th class="text-center">[[#{pregunta.acciones}]]</th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <tr th:each="p : ${preguntas}">
+                                                <td class="fw-bold">[[${p.idPregunta}]]</td>
+                                                <td>
+                                                    <img th:if="${p.imagenPregunta != null and !p.imagenPregunta.empty}"
+                                                         th:src="@{${p.imagenPregunta}}" alt="Imagen Pregunta"
+                                                         height="60" width="80" class="img-thumbnail"/>
+                                                    <span th:if="${p.imagenPregunta == null or p.imagenPregunta.empty}" class="badge bg-secondary">Sin imagen</span>
+                                                </td>
+                                                <td>[[${p.enunciado}]]</td>
+                                                <td><span class="badge bg-info text-dark">Tema [[${p.tema}]]</span></td>
+                                                <td><span class="badge bg-primary">[[${p.puntosPregunta}]] pts</span></td>
+                                                <td class="text-center">
+                                                    <!-- Únicamente botón de eliminar, tal como solicita el enunciado -->
+                                                    <button type="button" class="btn btn-danger btn-sm shadow-sm"
+                                                            data-bs-toggle="modal" data-bs-target="#confirmModal"
+                                                            th:data-bs-id="${p.idPregunta}"
+                                                            th:data-bs-descripcion="${p.enunciado}"
+                                                            title="Eliminar">
+                                                        <i class="fa-solid fa-trash me-1"></i>[[#{accion.eliminar}]]
+                                                    </button>
+                                                </td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <div class="text-center p-4 text-muted" th:if="${preguntas == null or preguntas.empty}">
+                                    <i class="fa-regular fa-folder-open fa-3x mb-2 d-block"></i>
+                                    <span>[[#{lista.vacia}]]</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Tarjeta contador total -->
+                    <div class="col-md-3">
+                        <div class="card text-center bg-primary text-white shadow-sm border-0 mb-4">
+                            <div class="card-body py-4">
+                                <h5 class="card-title text-uppercase">[[#{pregunta.total}]]</h5>
+                                <h2 class="display-4 fw-bold my-2">
+                                    <i class="fa-solid fa-list-check me-2"></i>[[${totalPreguntas}]]
+                                </h2>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. Fragmento: confirmarRegistro (Modal de confirmación de eliminación) -->
+        <section th:fragment="confirmarRegistro">
+            <div class="modal fade" id="confirmModal" tabindex="-1" aria-labelledby="modalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content">
+                        <form th:action="@{/pregunta/eliminar}" method="post">
+                            <input type="hidden" name="idPregunta" id="modalId"/>
+                            <div class="modal-header bg-danger text-white">
+                                <h5 class="modal-title" id="modalLabel">
+                                    <i class="fa-solid fa-triangle-exclamation me-2"></i>[[#{accion.confirmar}]]
+                                </h5>
+                                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                            </div>
+                            <div class="modal-body">
+                                <p class="mb-1">[[#{accion.confirmar.texto1}]] <strong id="modalDescripcion" class="text-danger"></strong>?</p>
+                                <small class="text-muted">[[#{accion.confirmar.texto2}]]</small>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                                    <i class="fa-solid fa-xmark me-1"></i>[[#{accion.cerrar}]]
+                                </button>
+                                <button type="submit" class="btn btn-danger">
+                                    <i class="fa-solid fa-trash me-1"></i>[[#{accion.eliminar}]]
+                                </button>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </body>
+</html>
